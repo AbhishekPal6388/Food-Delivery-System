@@ -1,51 +1,41 @@
 <div class="container cart-page animate-fade-in">
-  <h2>Your Shopping Cart</h2>
-
+  <h2>Your Shopping Cart 🛒</h2>
   <div class="cart-container" *ngIf="cartItems.length > 0; else emptyCart">
-    <div class="cart-items">
-      <div class="cart-item card" *ngFor="let item of cartItems">
-        <img [src]="item.foodItem?.imageUrl || 'assets/placeholder-food.jpg'" [alt]="item.foodItem?.name">
-        <div class="item-details">
-          <h3>{{ item.foodItem?.name }}</h3>
-          <p class="price-unit">${{ item.price }} per unit</p>
+    <div class="cart-items card">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <div class="item-info">
+          <img [src]="item.foodItem?.imageUrl || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100'" class="item-thumb">
+          <div class="item-details">
+            <h3>{{ item.foodItem?.name }}</h3>
+            <p>{{ item.foodItem?.category }}</p>
+          </div>
         </div>
-        <div class="quantity-controls">
-          <button (click)="updateQuantity(item.foodItemId, item.quantity - 1)">-</button>
-          <span>{{ item.quantity }}</span>
-          <button (click)="updateQuantity(item.foodItemId, item.quantity + 1)">+</button>
+        <div class="item-pricing">
+          <div class="quantity-control">
+            <button (click)="updateQty(item.foodItemId, item.quantity - 1)" [disabled]="item.quantity <= 1">-</button>
+            <span>{{ item.quantity }}</span>
+            <button (click)="updateQty(item.foodItemId, item.quantity + 1)">+</button>
+          </div>
+          <div class="item-total">${{ (item.price * item.quantity).toFixed(2) }}</div>
+          <button class="remove-btn" (click)="removeItem(item.foodItemId)">🗑️</button>
         </div>
-        <div class="item-total">
-          <p>${{ item.price * item.quantity }}</p>
-        </div>
-        <button class="remove-btn" (click)="removeItem(item.foodItemId)">✕</button>
       </div>
     </div>
-
     <div class="cart-summary card">
       <h3>Order Summary</h3>
-      <div class="summary-row">
-        <span>Subtotal</span>
-        <span>${{ totalPrice }}</span>
-      </div>
-      <div class="summary-row">
-        <span>Delivery Fee</span>
-        <span>$5.00</span>
-      </div>
-      <div class="summary-row total">
-        <span>Total</span>
-        <span>${{ totalPrice + 5 }}</span>
-      </div>
+      <div class="summary-row"><span>Subtotal</span><span>${{ totalPrice.toFixed(2) }}</span></div>
+      <div class="summary-row"><span>Delivery</span><span>$5.00</span></div>
+      <div class="summary-row total"><span>Total</span><span>${{ (totalPrice + 5).toFixed(2) }}</span></div>
       <button class="btn btn-primary checkout-btn" routerLink="/checkout">Proceed to Checkout</button>
-      <button class="btn btn-secondary" routerLink="/">Continue Shopping</button>
+      <button class="btn clear-btn" (click)="clearCart()">Clear Cart</button>
     </div>
   </div>
-
   <ng-template #emptyCart>
-    <div class="empty-state text-center">
+    <div class="empty-state text-center card">
       <span class="empty-icon">🛒</span>
       <h3>Your cart is empty</h3>
-      <p>Looks like you haven't added anything to your cart yet.</p>
-      <button class="btn btn-primary" routerLink="/">Explore Menu</button>
+      <p>Add something delicious from the menu!</p>
+      <button class="btn btn-primary" routerLink="/">Browse Menu</button>
     </div>
   </ng-template>
 </div>

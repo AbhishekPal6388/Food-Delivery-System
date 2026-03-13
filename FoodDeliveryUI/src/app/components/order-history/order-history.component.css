@@ -1,76 +1,17 @@
-.history-page h2 {
-  margin-bottom: 40px;
-}
-
-.orders-list {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.order-card {
-  padding: 30px;
-}
-
-.order-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 25px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-.order-id {
-  display: flex;
-  flex-direction: column;
-}
-
-.order-id span:first-child {
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.order-date {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 5px;
-}
-
-.order-items {
-  margin-bottom: 25px;
-}
-
-.item-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  font-size: 0.95rem;
-  color: var(--text-dark);
-}
-
-.order-footer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(0,0,0,0.05);
-}
-
-.total-label {
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.total-value {
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: var(--primary);
-}
-
+.history-page h2 { margin-bottom: 40px; }
+.orders-list { display: flex; flex-direction: column; gap: 30px; }
+.order-card { padding: 30px; }
+.order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.order-id { display: flex; flex-direction: column; gap: 5px; }
+.order-date { font-size: 0.85rem; color: var(--text-muted); }
+.order-items { margin-bottom: 25px; }
+.item-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+.order-footer { display: flex; justify-content: flex-end; align-items: center; gap: 20px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.05); }
+.total-label { color: var(--text-muted); }
+.total-value { font-weight: 700; font-size: 1.4rem; color: var(--primary); }
 .status-pending { background: #FFF4E5; color: #B7791F; }
 .status-info { background: #EBF8FF; color: #2B6CB0; }
 .status-warning { background: #FEFCBF; color: #B7791F; }
 .status-success { background: #F0FFF4; color: #2F855A; }
 .status-danger { background: #FFF5F5; color: #C53030; }
+.empty-state { padding: 80px; }

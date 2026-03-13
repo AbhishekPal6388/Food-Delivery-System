@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { Order, OrderStatus } from '../../models/order';
@@ -7,42 +8,30 @@ import { Order, OrderStatus } from '../../models/order';
 @Component({
   selector: 'app-order-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.css'
 })
 export class OrderHistoryComponent implements OnInit {
   orders: Order[] = [];
-  statusMap = OrderStatus;
 
-  constructor(
-    private orderService: OrderService,
-    private authService: AuthService
-  ) {}
+  constructor(private orderService: OrderService, private authService: AuthService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe(user => {
       if (user) {
-        this.orderService.getCustomerOrders(user.id).subscribe(orders => {
-          this.orders = orders.reverse(); // Newest first
+        this.orderService.getCustomerOrders(user.id).subscribe(o => {
+          this.orders = o.reverse();
+          this.cdr.detectChanges();
         });
       }
     });
   }
 
-  getStatusName(status: number): string {
-    return OrderStatus[status] || 'Unknown';
-  }
+  getStatusName(status: number): string { return OrderStatus[status] || 'Unknown'; }
 
   getStatusClass(status: number): string {
-    switch (status) {
-      case OrderStatus.Pending: return 'status-pending';
-      case OrderStatus.Confirmed: return 'status-info';
-      case OrderStatus.Preparing: return 'status-warning';
-      case OrderStatus.Shipped: return 'status-info';
-      case OrderStatus.Delivered: return 'status-success';
-      case OrderStatus.Cancelled: return 'status-danger';
-      default: return '';
-    }
+    const map: any = { 0: 'status-pending', 1: 'status-info', 2: 'status-warning', 3: 'status-info', 4: 'status-success', 5: 'status-danger' };
+    return map[status] || '';
   }
 }

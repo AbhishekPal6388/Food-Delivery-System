@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { FoodItem } from '../models/food-item';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FoodService {
-  private apiUrl = 'https://localhost:7119/api/FoodItems';
+  private apiUrl = 'http://localhost:5133/api/FoodItems';
 
   constructor(private http: HttpClient) { }
 
   getFoodItems(): Observable<FoodItem[]> {
-    return this.http.get<FoodItem[]>(this.apiUrl);
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(res => {
+        let arr = Array.isArray(res) ? res : (res?.$values ?? res?.value ?? res?.data ?? []);
+        return [...arr];
+      })
+    );
   }
 
   getFoodItem(id: number): Observable<FoodItem> {

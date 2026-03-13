@@ -1,42 +1,21 @@
 <div class="auth-page animate-fade-in">
   <div class="auth-card card">
-    <h2>Welcome Back</h2>
+    <h2>Welcome Back 👋</h2>
     <p>Please login to your account to continue.</p>
-
-    <form (ngSubmit)="login()" #loginForm="ngForm">
+    <form (ngSubmit)="login()" #f="ngForm">
       <div class="form-group">
-        <label for="username">Username</label>
-        <input 
-          type="text" 
-          id="username" 
-          name="username" 
-          [(ngModel)]="credentials.username" 
-          required 
-          placeholder="Enter your username"
-        >
+        <label>Username</label>
+        <input type="text" name="username" [(ngModel)]="credentials.username" required placeholder="Enter your username">
       </div>
-
       <div class="form-group">
-        <label for="password">Password</label>
-        <input 
-          type="password" 
-          id="password" 
-          name="password" 
-          [(ngModel)]="credentials.password" 
-          required 
-          placeholder="Enter your password"
-        >
+        <label>Password</label>
+        <input type="password" name="password" [(ngModel)]="credentials.password" required placeholder="Enter your password">
       </div>
-
       <div class="error-msg" *ngIf="error">{{ error }}</div>
-
-      <button type="submit" class="btn btn-primary auth-btn" [disabled]="!loginForm.form.valid || loading">
+      <button type="submit" class="btn btn-primary auth-btn" [disabled]="!f.form.valid || loading">
         {{ loading ? 'Logging in...' : 'Login' }}
       </button>
-
-      <div class="auth-footer">
-        Don't have an account? <a routerLink="/register">Register here</a>
-      </div>
+      <div class="auth-footer">Don't have an account? <a routerLink="/register">Register here</a></div>
     </form>
   </div>
 </div>

@@ -13,25 +13,15 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   credentials = { username: '', password: '' };
-  error = '';
-  loading = false;
+  error = ''; loading = false;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login(): void {
-    this.loading = true;
-    this.error = '';
+    this.loading = true; this.error = '';
     this.authService.login(this.credentials).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        this.error = err.error || 'Login failed. Please check your credentials.';
-        this.loading = false;
-      }
+      next: () => this.router.navigate(['/']),
+      error: (err) => { this.error = err.error || 'Login failed.'; this.loading = false; }
     });
   }
 }

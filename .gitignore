@@ -1,0 +1,20 @@
+# ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+.vs/
+appsettings.Development.json
+
+# Angular / Node
+node_modules/
+dist/
+.angular/
+package-lock.json
+
+# Misc
+test.js
+*.log
+
+# Secrets — keep appsettings.json but exclude sensitive overrides
+# (Ensure no passwords are committed)

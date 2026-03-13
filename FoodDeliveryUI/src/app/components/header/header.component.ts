@@ -17,23 +17,15 @@ export class HeaderComponent implements OnInit {
   isAdmin = false;
   cartItemCount = 0;
 
-  constructor(
-    private authService: AuthService,
-    private cartService: CartService
-  ) {}
+  constructor(private authService: AuthService, private cartService: CartService) {}
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       this.isAdmin = this.authService.isAdmin();
     });
-
-    this.cartService.cartCount$.subscribe(count => {
-      this.cartItemCount = count;
-    });
+    this.cartService.cartCount$.subscribe(count => { this.cartItemCount = count; });
   }
 
-  logout(): void {
-    this.authService.logout();
-  }
+  logout(): void { this.authService.logout(); }
 }

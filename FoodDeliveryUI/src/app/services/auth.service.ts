@@ -7,7 +7,7 @@ import { User } from '../models/user';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7119/api/Auth'; // Adjust port if needed
+  private apiUrl = 'http://localhost:5133/api/Auth'; // Adjust port if needed
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromLocalStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
 

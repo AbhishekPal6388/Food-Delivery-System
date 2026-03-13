@@ -1,65 +1,41 @@
 <div class="container admin-page animate-fade-in">
   <div class="admin-header">
-    <h2>Admin Dashboard</h2>
+    <h2>⚙️ Admin Dashboard</h2>
     <div class="tabs">
-      <button [class.active]="activeTab === 'orders'" (click)="activeTab = 'orders'">Order Management</button>
-      <button [class.active]="activeTab === 'menu'" (click)="activeTab = 'menu'">Menu Management</button>
+      <button [class.active]="activeTab==='orders'" (click)="activeTab='orders'">Orders</button>
+      <button [class.active]="activeTab==='menu'" (click)="activeTab='menu'">Menu</button>
     </div>
   </div>
 
-  <div class="metrics-grid" *ngIf="activeTab === 'orders'">
-    <div class="metric-card card">
-      <span class="label">Total Orders</span>
-      <span class="value">{{ getDashboardMetrics().totalOrders }}</span>
+  <ng-container *ngIf="activeTab==='orders'">
+    <div class="metrics-grid">
+      <div class="metric-card card"><span class="label">Total Orders</span><span class="value">{{ metrics.total }}</span></div>
+      <div class="metric-card card"><span class="label">Revenue</span><span class="value">${{ metrics.revenue }}</span></div>
+      <div class="metric-card card"><span class="label">Pending</span><span class="value">{{ metrics.pending }}</span></div>
     </div>
-    <div class="metric-card card">
-      <span class="label">Total Revenue</span>
-      <span class="value">${{ getDashboardMetrics().revenue.toFixed(2) }}</span>
-    </div>
-    <div class="metric-card card">
-      <span class="label">Pending Orders</span>
-      <span class="value">{{ getDashboardMetrics().pending }}</span>
-    </div>
-  </div>
-
-  <div class="orders-section" *ngIf="activeTab === 'orders'">
     <div class="table-container card">
       <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Items</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Update</th></tr></thead>
         <tbody>
           <tr *ngFor="let order of orders">
             <td>#FD-{{ order.id }}</td>
-            <td>{{ order.userId }}</td> <!-- ideally show username -->
-            <td>{{ order.orderItems.length }} items</td>
+            <td>User #{{ order.userId }}</td>
+            <td>{{ order.orderItems ? order.orderItems.length : 0 }}</td>
             <td>${{ order.totalAmount }}</td>
+            <td><span class="badge status-{{ getStatusName(order.status).toLowerCase() }}">{{ getStatusName(order.status) }}</span></td>
             <td>
-              <span class="badge" [ngClass]="'status-' + getStatusName(order.status).toLowerCase()">
-                {{ getStatusName(order.status) }}
-              </span>
-            </td>
-            <td>
-              <select (change)="updateStatus(order.id, $any($event.target).value)" class="status-select">
-                <option *ngFor="let name of statusOptions" [value]="name" [selected]="name === getStatusName(order.status)">
-                  {{ name }}
-                </option>
+              <select class="status-select" (change)="updateStatus(order.id, $any($event.target).value)">
+                <option *ngFor="let s of statusOptions" [value]="s" [selected]="s === getStatusName(order.status)">{{ s }}</option>
               </select>
             </td>
           </tr>
+          <tr *ngIf="orders.length === 0"><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted)">No orders yet.</td></tr>
         </tbody>
       </table>
     </div>
-  </div>
+  </ng-container>
 
-  <div class="menu-section" *ngIf="activeTab === 'menu'">
+  <ng-container *ngIf="activeTab==='menu'">
     <app-menu-management></app-menu-management>
-  </div>
+  </ng-container>
 </div>

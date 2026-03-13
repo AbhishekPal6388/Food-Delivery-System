@@ -13,28 +13,18 @@ import { OrderItem } from '../../models/order-item';
 })
 export class CartComponent implements OnInit {
   cartItems: OrderItem[] = [];
-  totalPrice: number = 0;
+  totalPrice = 0;
 
   constructor(private cartService: CartService) {}
 
-  ngOnInit(): void {
-    this.cartItems = this.cartService.getCartItems();
-    this.calculateTotal();
-  }
+  ngOnInit(): void { this.refreshCart(); }
 
-  updateQuantity(foodItemId: number, quantity: number): void {
-    this.cartService.updateQuantity(foodItemId, quantity);
+  refreshCart(): void {
     this.cartItems = this.cartService.getCartItems();
-    this.calculateTotal();
-  }
-
-  removeItem(foodItemId: number): void {
-    this.cartService.removeFromCart(foodItemId);
-    this.cartItems = this.cartService.getCartItems();
-    this.calculateTotal();
-  }
-
-  calculateTotal(): void {
     this.totalPrice = this.cartService.getTotalPrice();
   }
+
+  removeItem(id: number): void { this.cartService.removeFromCart(id); this.refreshCart(); }
+  updateQty(id: number, qty: number): void { this.cartService.updateQuantity(id, qty); this.refreshCart(); }
+  clearCart(): void { this.cartService.clearCart(); this.refreshCart(); }
 }

@@ -1,48 +1,54 @@
 <section class="hero animate-fade-in">
-  <div class="container hero-content">
-    <h1>Delicious Food, <span class="highlight">Delivered Fast</span></h1>
-    <p>Choose from our widest range of gourmet meals and get them delivered in minutes.</p>
-    <div class="search-bar glass-morphism">
-      <input type="text" placeholder="Search for your favorite dish...">
-      <button class="btn btn-primary">Search</button>
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <h1>Gourmet Food<br><span class="highlight">Delivered Fast 🚀</span></h1>
+      <p>Fresh, chef-crafted meals from the world's finest cuisines — at your doorstep in minutes.</p>
+      <div class="hero-badges">
+        <span class="badge-pill">⚡ 30 mins delivery</span>
+        <span class="badge-pill">⭐ Top-rated chefs</span>
+        <span class="badge-pill">🌿 Fresh ingredients</span>
+      </div>
+    </div>
+    <div class="hero-image-stack">
+      <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80" class="hero-img hero-img-back" alt="Food">
+      <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80" class="hero-img hero-img-front" alt="Burger">
     </div>
   </div>
 </section>
 
-<section class="menu-section container">
-  <div class="section-header">
-    <h2>Explore Our Menu</h2>
-    <div class="categories">
-      <button 
-        *ngFor="let cat of categories" 
-        [class.active]="selectedCategory === cat"
-        (click)="filterByCategory(cat)"
-        class="category-btn"
-      >
-        {{ cat }}
-      </button>
-    </div>
+<div class="container menu-section animate-fade-in">
+  <div class="menu-header">
+    <h2>Our <span class="highlight">Gourmet Menu</span></h2>
+    <p>Discover the finest dishes from around the world</p>
+  </div>
+
+  <div class="categories-bar">
+    <button *ngFor="let cat of categories" class="cat-btn" [class.active]="activeCategory === cat" (click)="filterByCategory(cat)">
+      <span class="cat-icon">{{ cat === 'All' ? '🍽️' : cat === 'Pizza' ? '🍕' : cat === 'Burgers' ? '🍔' : cat === 'Sushi' ? '🍣' : cat === 'Desserts' ? '🍰' : '🥗' }}</span>
+      {{ cat }}
+    </button>
   </div>
 
   <div class="food-grid">
-    <div class="food-card card animate-fade-in" *ngFor="let item of filteredItems">
-      <div class="food-img">
-        <img [src]="item.imageUrl || 'assets/placeholder-food.jpg'" [alt]="item.name">
-        <span class="badge badge-success" *ngIf="item.isAvailable">Available</span>
+    <div class="food-card card" *ngFor="let item of filteredItems" [class.added]="addedItemId === item.id">
+      <div class="card-img">
+        <img [src]="item.imageUrl" [alt]="item.name" loading="lazy">
+        <div class="card-overlay">
+          <span class="category-tag">{{ item.category }}</span>
+          <span class="rating">⭐ {{ (4.3 + (item.id % 3) * 0.2).toFixed(1) }}</span>
+        </div>
       </div>
-      <div class="food-info">
-        <div class="food-header">
+      <div class="card-body">
+        <div class="card-title">
           <h3>{{ item.name }}</h3>
           <span class="price">${{ item.price }}</span>
         </div>
-        <p class="desc">{{ item.description }}</p>
-        <div class="food-footer">
-          <span class="category-tag">{{ item.category }}</span>
-          <button class="btn btn-primary add-btn" (click)="addToCart(item)">
-            <span>+</span> Add to Cart
-          </button>
-        </div>
+        <p class="description">{{ item.description }}</p>
+        <button class="btn btn-primary add-to-cart" (click)="addToCart(item)">
+          <span *ngIf="addedItemId !== item.id">Add to Cart 🛒</span>
+          <span *ngIf="addedItemId === item.id">✅ Added!</span>
+        </button>
       </div>
     </div>
   </div>
-</section>
+</div>

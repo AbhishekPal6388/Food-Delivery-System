@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FoodService } from '../../services/food.service';
@@ -14,64 +14,28 @@ import { FoodItem } from '../../models/food-item';
 export class MenuManagementComponent implements OnInit {
   foodItems: FoodItem[] = [];
   editingItem: FoodItem | null = null;
-  newItem: FoodItem = this.getEmptyFoodItem();
+  newItem: FoodItem = this.blank();
   showForm = false;
 
-  constructor(private foodService: FoodService) {}
+  constructor(private foodService: FoodService, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {
-    this.loadFoodItems();
-  }
+  ngOnInit(): void { this.load(); }
 
-  loadFoodItems(): void {
-    this.foodService.getFoodItems().subscribe(items => {
-      this.foodItems = items;
-    });
-  }
+  load(): void { this.foodService.getFoodItems().subscribe(items => { this.foodItems = [...items]; this.cdr.detectChanges(); }); }
 
-  getEmptyFoodItem(): FoodItem {
-    return {
-      id: 0,
-      name: '',
-      description: '',
-      price: 0,
-      imageUrl: '',
-      category: '',
-      isAvailable: true
-    };
-  }
+  blank(): FoodItem { return { id: 0, name: '', description: '', price: 0, imageUrl: '', category: '', isAvailable: true }; }
 
-  saveItem(): void {
+  save(): void {
     if (this.editingItem) {
-      this.foodService.updateFoodItem(this.newItem).subscribe(() => {
-        this.resetForm();
-        this.loadFoodItems();
-      });
+      this.foodService.updateFoodItem(this.newItem).subscribe(() => { this.reset(); this.load(); });
     } else {
-      this.foodService.addFoodItem(this.newItem).subscribe(() => {
-        this.resetForm();
-        this.loadFoodItems();
-      });
+      this.foodService.addFoodItem(this.newItem).subscribe(() => { this.reset(); this.load(); });
     }
   }
 
-  editItem(item: FoodItem): void {
-    this.editingItem = item;
-    this.newItem = { ...item };
-    this.showForm = true;
-  }
+  edit(item: FoodItem): void { this.editingItem = item; this.newItem = { ...item }; this.showForm = true; }
 
-  deleteItem(id: number): void {
-    if (confirm('Are you sure you want to delete this item?')) {
-      this.foodService.deleteFoodItem(id).subscribe(() => {
-        this.loadFoodItems();
-      });
-    }
-  }
+  delete(id: number): void { if (confirm('Delete this item?')) this.foodService.deleteFoodItem(id).subscribe(() => this.load()); }
 
-  resetForm(): void {
-    this.editingItem = null;
-    this.newItem = this.getEmptyFoodItem();
-    this.showForm = false;
-  }
+  reset(): void { this.editingItem = null; this.newItem = this.blank(); this.showForm = false; }
 }

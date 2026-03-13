@@ -13,30 +13,16 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
   user = { username: '', password: '', confirmPassword: '' };
-  error = '';
-  loading = false;
+  error = ''; loading = false;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   register(): void {
-    if (this.user.password !== this.user.confirmPassword) {
-      this.error = 'Passwords do not match';
-      return;
-    }
-
-    this.loading = true;
-    this.error = '';
-    this.authService.register({ username: this.user.username, password: this.user.password }).subscribe({
-      next: () => {
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        this.error = err.error || 'Registration failed. Please try again.';
-        this.loading = false;
-      }
+    if (this.user.password !== this.user.confirmPassword) { this.error = 'Passwords do not match.'; return; }
+    this.loading = true; this.error = '';
+    this.authService.register(this.user).subscribe({
+      next: () => this.router.navigate(['/']),
+      error: (err) => { this.error = err.error || 'Registration failed.'; this.loading = false; }
     });
   }
 }

@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderService } from '../../services/order.service';
-import { FoodService } from '../../services/food.service';
 import { Order, OrderStatus } from '../../models/order';
-import { FoodItem } from '../../models/food-item';
 import { MenuManagementComponent } from '../menu-management/menu-management.component';
 
 @Component({
@@ -13,41 +11,50 @@ import { MenuManagementComponent } from '../menu-management/menu-management.comp
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css'
 })
-export class AdminDashboardComponent implements OnInit {
+export class AdminDashboardComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   activeTab: 'orders' | 'menu' = 'orders';
   statusOptions = Object.keys(OrderStatus).filter(k => isNaN(Number(k)));
+  private refreshInterval: any;
 
-  constructor(
-    private orderService: OrderService,
-    private foodService: FoodService
-  ) {}
+  constructor(private orderService: OrderService, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {
-    this.loadOrders();
+  ngOnInit(): void { 
+    this.loadOrders(); 
+    this.refreshInterval = setInterval(() => this.loadOrders(), 3000); // Auto refresh every 3 seconds
   }
 
-  loadOrders(): void {
-    this.orderService.getOrders().subscribe(orders => {
-      this.orders = orders.reverse();
+  ngOnDestroy(): void {
+    if (this.refreshInterval) { clearInterval(this.refreshInterval); }
+  }
+
+  loadOrders(): void { 
+    this.orderService.getOrders().subscribe({
+      next: o => {
+        try {
+          this.orders = o.reverse();
+          this.cdr.detectChanges();
+          console.log('Admin orders set, length:', this.orders.length);
+        } catch (e) {
+          console.error('Error in reverse:', e);
+        }
+      },
+      error: e => console.error('Subscription error:', e)
     });
   }
+  
+  refresh(): void { this.loadOrders(); }
 
   updateStatus(orderId: number, statusStr: string): void {
-    const status = (OrderStatus as any)[statusStr];
-    this.orderService.updateOrderStatus(orderId, status).subscribe(() => {
-      this.loadOrders();
-    });
+    this.orderService.updateOrderStatus(orderId, (OrderStatus as any)[statusStr]).subscribe(() => this.loadOrders());
   }
 
-  getStatusName(status: number): string {
-    return OrderStatus[status];
-  }
+  getStatusName(s: number): string { return OrderStatus[s] || 'Unknown'; }
 
-  getDashboardMetrics() {
+  get metrics() {
     return {
-      totalOrders: this.orders.length,
-      revenue: this.orders.reduce((acc, o) => acc + o.totalAmount, 0),
+      total: this.orders.length,
+      revenue: this.orders.reduce((a, o) => a + o.totalAmount, 0).toFixed(2),
       pending: this.orders.filter(o => o.status === OrderStatus.Pending).length
     };
   }
