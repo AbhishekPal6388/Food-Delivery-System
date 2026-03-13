@@ -1,0 +1,33 @@
+<header class="glass-morphism">
+  <div class="container nav-content">
+    <div class="logo" routerLink="/">
+      <span class="logo-icon">🍔</span>
+      <span class="logo-text">Food<span class="highlight">Dash</span></span>
+    </div>
+    
+    <nav>
+      <ul class="nav-links">
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+        <li *ngIf="currentUser"><a routerLink="/orders" routerLinkActive="active">My Orders</a></li>
+        <li *ngIf="isAdmin"><a routerLink="/admin" routerLinkActive="active">Admin</a></li>
+      </ul>
+    </nav>
+
+    <div class="auth-actions">
+      <ng-container *ngIf="!currentUser; else userActions">
+        <button class="btn btn-login" routerLink="/login">Login</button>
+        <button class="btn btn-primary" routerLink="/register">Sign Up</button>
+      </ng-container>
+      <ng-template #userActions>
+        <div class="user-profile">
+          <span class="username">{{ currentUser.username }}</span>
+          <button class="btn btn-logout" (click)="logout()">Logout</button>
+        </div>
+        <div class="cart-icon" routerLink="/cart">
+          <span class="icon">🛒</span>
+          <span class="badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</header>

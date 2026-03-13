@@ -1,0 +1,38 @@
+<div class="container history-page animate-fade-in">
+  <h2>Your Order History</h2>
+
+  <div class="orders-list" *ngIf="orders.length > 0; else noOrders">
+    <div class="order-card card" *ngFor="let order of orders">
+      <div class="order-header">
+        <div class="order-id">
+          <span>Order #FD-{{ order.id }}</span>
+          <span class="order-date">{{ order.orderDate | date:'medium' }}</span>
+        </div>
+        <div class="order-status badge" [ngClass]="getStatusClass(order.status)">
+          {{ getStatusName(order.status) }}
+        </div>
+      </div>
+
+      <div class="order-items">
+        <div class="item-row" *ngFor="let item of order.orderItems">
+          <span>{{ item.quantity }}x {{ item.foodItem?.name }}</span>
+          <span>${{ item.price * item.quantity }}</span>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <div class="total-label">Total Amount</div>
+        <div class="total-value">${{ order.totalAmount }}</div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noOrders>
+    <div class="empty-state text-center card">
+      <span class="empty-icon">🍱</span>
+      <h3>No orders yet</h3>
+      <p>Hungry? Place your first order today!</p>
+      <button class="btn btn-primary" routerLink="/">Order Now</button>
+    </div>
+  </ng-template>
+</div>

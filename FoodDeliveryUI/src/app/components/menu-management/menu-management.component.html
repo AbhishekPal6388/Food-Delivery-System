@@ -1,0 +1,74 @@
+<div class="menu-mgmt">
+  <div class="mgmt-header">
+    <h3>Food Items List</h3>
+    <button class="btn btn-primary" (click)="showForm = true" *ngIf="!showForm">+ Add New Item</button>
+  </div>
+
+  <div class="form-card card animate-fade-in" *ngIf="showForm">
+    <h3>{{ editingItem ? 'Edit Item' : 'Add New Food Item' }}</h3>
+    <form (ngSubmit)="saveItem()" #foodForm="ngForm">
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label>Item Name</label>
+          <input type="text" name="name" [(ngModel)]="newItem.name" required>
+        </div>
+        <div class="form-group flex-1">
+          <label>Category</label>
+          <input type="text" name="category" [(ngModel)]="newItem.category" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label>Price ($)</label>
+          <input type="number" name="price" [(ngModel)]="newItem.price" required>
+        </div>
+        <div class="form-group flex-1">
+          <label>Image URL</label>
+          <input type="text" name="imageUrl" [(ngModel)]="newItem.imageUrl">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea name="description" [(ngModel)]="newItem.description" rows="3"></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!foodForm.form.valid">
+          {{ editingItem ? 'Update Item' : 'Add Item' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-container card">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of foodItems">
+          <td><img [src]="item.imageUrl || 'assets/placeholder-food.jpg'" class="thumb"></td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.category }}</td>
+          <td>${{ item.price }}</td>
+          <td>
+            <span class="badge" [ngClass]="item.isAvailable ? 'badge-success' : 'status-danger'">
+              {{ item.isAvailable ? 'Available' : 'Out of Stock' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="icon-btn edit" (click)="editItem(item)">✏️</button>
+            <button class="icon-btn delete" (click)="deleteItem(item.id)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

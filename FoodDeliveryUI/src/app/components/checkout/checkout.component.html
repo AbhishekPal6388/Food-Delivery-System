@@ -1,0 +1,63 @@
+<div class="container checkout-page animate-fade-in">
+  <h2>Checkout</h2>
+
+  <div class="checkout-grid" *ngIf="cartItems.length > 0">
+    <div class="delivery-card card">
+      <h3>Delivery Details</h3>
+      <form #checkoutForm="ngForm">
+        <div class="form-group">
+          <label for="address">Full Address</label>
+          <input type="text" id="address" name="address" [(ngModel)]="deliveryDetails.address" required placeholder="Street name, house/apt number">
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" [(ngModel)]="deliveryDetails.city" required placeholder="Your city">
+          </div>
+          <div class="form-group flex-1">
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" name="phone" [(ngModel)]="deliveryDetails.phone" required placeholder="For delivery updates">
+          </div>
+        </div>
+
+        <div class="payment-section">
+          <h3>Payment Method</h3>
+          <div class="payment-option selected">
+            <span class="icon">💵</span>
+            <span>Cash on Delivery</span>
+          </div>
+          <p class="payment-note">Credit card payments coming soon.</p>
+        </div>
+      </form>
+    </div>
+
+    <div class="order-summary card">
+      <h3>Your Order</h3>
+      <div class="order-items-scroll">
+        <div class="summary-item" *ngFor="let item of cartItems">
+          <span class="item-name">{{ item.quantity }}x {{ item.foodItem?.name }}</span>
+          <span class="item-price">${{ item.price * item.quantity }}</span>
+        </div>
+      </div>
+
+      <div class="summary-totals">
+        <div class="row">
+          <span>Subtotal</span>
+          <span>${{ totalPrice }}</span>
+        </div>
+        <div class="row">
+          <span>Delivery</span>
+          <span>$5.00</span>
+        </div>
+        <div class="row total">
+          <span>Total To Pay</span>
+          <span>${{ totalPrice + 5 }}</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary place-order-btn" [disabled]="!checkoutForm.form.valid || loading" (click)="placeOrder()">
+        {{ loading ? 'Processing Order...' : 'Place Order' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<section class="hero animate-fade-in">
+  <div class="container hero-content">
+    <h1>Delicious Food, <span class="highlight">Delivered Fast</span></h1>
+    <p>Choose from our widest range of gourmet meals and get them delivered in minutes.</p>
+    <div class="search-bar glass-morphism">
+      <input type="text" placeholder="Search for your favorite dish...">
+      <button class="btn btn-primary">Search</button>
+    </div>
+  </div>
+</section>
+
+<section class="menu-section container">
+  <div class="section-header">
+    <h2>Explore Our Menu</h2>
+    <div class="categories">
+      <button 
+        *ngFor="let cat of categories" 
+        [class.active]="selectedCategory === cat"
+        (click)="filterByCategory(cat)"
+        class="category-btn"
+      >
+        {{ cat }}
+      </button>
+    </div>
+  </div>
+
+  <div class="food-grid">
+    <div class="food-card card animate-fade-in" *ngFor="let item of filteredItems">
+      <div class="food-img">
+        <img [src]="item.imageUrl || 'assets/placeholder-food.jpg'" [alt]="item.name">
+        <span class="badge badge-success" *ngIf="item.isAvailable">Available</span>
+      </div>
+      <div class="food-info">
+        <div class="food-header">
+          <h3>{{ item.name }}</h3>
+          <span class="price">${{ item.price }}</span>
+        </div>
+        <p class="desc">{{ item.description }}</p>
+        <div class="food-footer">
+          <span class="category-tag">{{ item.category }}</span>
+          <button class="btn btn-primary add-btn" (click)="addToCart(item)">
+            <span>+</span> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

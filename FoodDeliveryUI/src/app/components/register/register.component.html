@@ -1,0 +1,54 @@
+<div class="auth-page animate-fade-in">
+  <div class="auth-card card">
+    <h2>Create Account</h2>
+    <p>Join FoodDash today and enjoy gourmet meals.</p>
+
+    <form (ngSubmit)="register()" #registerForm="ngForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          [(ngModel)]="user.username" 
+          required 
+          placeholder="Choose a username"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          [(ngModel)]="user.password" 
+          required 
+          placeholder="Create a password"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          name="confirmPassword" 
+          [(ngModel)]="user.confirmPassword" 
+          required 
+          placeholder="Confirm your password"
+        >
+      </div>
+
+      <div class="error-msg" *ngIf="error">{{ error }}</div>
+
+      <button type="submit" class="btn btn-primary auth-btn" [disabled]="!registerForm.form.valid || loading">
+        {{ loading ? 'Creating Account...' : 'Register' }}
+      </button>
+
+      <div class="auth-footer">
+        Already have an account? <a routerLink="/login">Login here</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+stages:
+  - build
+  - test
+
+# Backend Build
+build_backend:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - cd FoodDeliveryAPI
+    - dotnet restore
+    - dotnet build --configuration Release
+
+# Frontend Build
+build_frontend:
+  stage: build
+  image: node:latest
+  script:
+    - cd FoodDeliveryUI
+    - npm install
+    - npm run build
+
+# Backend Tests
+test_backend:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - cd FoodDeliveryAPI
+    - dotnet test
+  allow_failure: true
+
+# Frontend Tests
+test_frontend:
+  stage: test
+  image: node:latest
+  script:
+    - cd FoodDeliveryUI
+    - npm install
+    - npm test -- --watch=false --browsers=ChromeHeadless
+  allow_failure: true
